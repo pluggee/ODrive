@@ -1026,11 +1026,11 @@ interfaces:
         unit: turn
         doc: The position reference actually being used by the position controller.  This is the same as `input_pos` in `INPUT_MODE_PASSTHROUGH`, but may vary according to `InputMode`.
       flip_torque:
-        type: readonly bool
+        type: bool
         doc: switch to flip torque at position
-      flip_count:
-        type: uint32
-        doc: test variable
+      flip_position:
+        type: int32
+        doc: threshold to flip torque direction
       vel_setpoint:
         type: readonly float32
         unit: turn/s

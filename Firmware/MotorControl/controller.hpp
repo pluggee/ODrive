@@ -111,7 +111,9 @@ public:
     bool flip_torque_ = false;
     float flip_pos_ = 0.0f;
     uint32_t flip_counter_ = 0;
-    uint32_t flip_count_ = 8000;
+    int32_t flip_position_ = 8000;
+    int32_t prev_shadow = 0;
+
 
     Autotuning_t autotuning_;
     float autotuning_phase_ = 0.0f;
