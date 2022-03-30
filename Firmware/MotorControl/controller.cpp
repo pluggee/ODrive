@@ -389,6 +389,16 @@ bool Controller::update() {
         return false;
     }
 
+    // here we decide when to flip the torque
+    // if (flip_torque){
+    //     // here detect the position, decide whether to flip or not
+    //     flip_counter++;
+    //     if (flip_counter >= flip_count){
+    //         flip_counter = 0;
+    //         torque = -1 * torque;
+    //     }
+    // }
+
     torque_output_ = torque;
 
     // TODO: this is inconsistent with the other errors which are sticky.

@@ -107,6 +107,12 @@ public:
     float input_filter_kp_ = 0.0f;
     float input_filter_ki_ = 0.0f;
 
+    // experimental features here - pluggee
+    bool flip_torque_ = false;
+    float flip_pos_ = 0.0f;
+    uint32_t flip_counter_ = 0;
+    uint32_t flip_count_ = 8000;
+
     Autotuning_t autotuning_;
     float autotuning_phase_ = 0.0f;
     
