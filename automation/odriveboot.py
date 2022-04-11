@@ -6,6 +6,7 @@ import time
 
 # init odrv0
 odrv0 = odrive.find_any()
+odrv0.clear_errors()
 
 # First we load all config parameters
 
@@ -14,8 +15,8 @@ odrv0.axis0.motor.config.current_lim = 50
 odrv0.axis1.motor.config.current_lim = 50
 
 # angular velocity limit, turns/s
-odrv0.axis0.controller.config.vel_limit = 2
-odrv0.axis1.controller.config.vel_limit = 2
+odrv0.axis0.controller.config.vel_limit = 10
+odrv0.axis1.controller.config.vel_limit = 10
 
 # motor pole pairs
 odrv0.axis0.motor.config.pole_pairs = 7
@@ -69,8 +70,6 @@ is_brake_res_armed = odrv0.brake_resistor_armed
 is_brake_res_saturated = odrv0.brake_resistor_saturated
 brake_res_current = odrv0.brake_resistor_current
 
-odrv0.axis0.controller.input_torque = 0.1
-odrv0.axis1.controller.input_torque = 0.1
 time.sleep(0.1)
 ax0t = odrv0.axis0.controller.torque_setpoint
 ax1t = odrv0.axis1.controller.torque_setpoint
@@ -98,10 +97,9 @@ while (odrv0.axis0.current_state != AXIS_STATE_IDLE) or (odrv0.axis1.current_sta
 print('Calibration complete')
 
 odrv0.axis0.requested_state = AXIS_STATE_CLOSED_LOOP_CONTROL
+time.sleep(0.1)
 odrv0.axis1.requested_state = AXIS_STATE_CLOSED_LOOP_CONTROL
-
 time.sleep(1)
-
 ax0state = odrv0.axis0.current_state
 ax1state = odrv0.axis1.current_state
 
@@ -110,7 +108,10 @@ print('Axis 1 state: ' + str(ax1state))
 
 time.sleep(5)
 
+#odrv0.axis0.controller.input_torque = 0.1
+#odrv0.axis1.controller.input_torque = 0.1
+
 # place both motors in flipping torque mode
-odrv0.flipping_torque = 1
+odrv0.flipping_torque = 0.05 
 odrv0.start_torque_flip = True
 
