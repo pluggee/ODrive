@@ -10,12 +10,12 @@ odrv0 = odrive.find_any()
 # First we load all config parameters
 
 # motor current limit
-odrv0.axis0.motor.config.current_lim = 10
-odrv0.axis1.motor.config.current_lim = 10
+odrv0.axis0.motor.config.current_lim = 50
+odrv0.axis1.motor.config.current_lim = 50
 
 # angular velocity limit, turns/s
-odrv0.axis0.controller.config.vel_limit = 10000
-odrv0.axis1.controller.config.vel_limit = 10000
+odrv0.axis0.controller.config.vel_limit = 2
+odrv0.axis1.controller.config.vel_limit = 2
 
 # motor pole pairs
 odrv0.axis0.motor.config.pole_pairs = 7
@@ -33,9 +33,19 @@ odrv0.axis1.motor.config.motor_type = 0
 odrv0.axis0.encoder.config.cpr = 2400
 odrv0.axis1.encoder.config.cpr = 2400
 
+# reset motor inputs
+odrv0.axis0.controller.input_vel = 0
+odrv0.axis0.controller.input_torque = 0
+odrv0.axis1.controller.input_vel = 0
+odrv0.axis1.controller.input_torque = 0
+
 # set motor control mode
-odrv0.axis0.controller.config.control_mode = CONTROL_MODE_POSITION_CONTROL
-odrv0.axis1.controller.config.control_mode = CONTROL_MODE_POSITION_CONTROL
+odrv0.axis0.controller.config.control_mode = CONTROL_MODE_TORQUE_CONTROL
+odrv0.axis1.controller.config.control_mode = CONTROL_MODE_TORQUE_CONTROL
+
+# set input mode
+odrv0.axis0.controller.config.input_mode = INPUT_MODE_PASSTHROUGH
+odrv0.axis1.controller.config.input_mode = INPUT_MODE_PASSTHROUGH
 
 # give controller some time
 time.sleep(0.5)
@@ -59,8 +69,8 @@ is_brake_res_armed = odrv0.brake_resistor_armed
 is_brake_res_saturated = odrv0.brake_resistor_saturated
 brake_res_current = odrv0.brake_resistor_current
 
-odrv0.axis0.controller.input_torque = 1
-odrv0.axis1.controller.input_torque = 1
+odrv0.axis0.controller.input_torque = 0.1
+odrv0.axis1.controller.input_torque = 0.1
 time.sleep(0.1)
 ax0t = odrv0.axis0.controller.torque_setpoint
 ax1t = odrv0.axis1.controller.torque_setpoint
@@ -97,3 +107,10 @@ ax1state = odrv0.axis1.current_state
 
 print('Axis 0 state: ' + str(ax0state))
 print('Axis 1 state: ' + str(ax1state))
+
+time.sleep(5)
+
+# place both motors in flipping torque mode
+odrv0.flipping_torque = 1
+odrv0.start_torque_flip = True
+
