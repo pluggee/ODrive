@@ -432,6 +432,10 @@ void ODrive::control_loop_cb(uint32_t timestamp) {
         }
 
         // here we implement the higher level PID controller
+        // 1- calculate position error between both motors
+        // 2- calculate integral and differential errors
+        // 3- evaluate delta_torque modulations for both motors
+        // 4- inject delta torque into each motors, based on direction
 
         MEASURE_TIME(axis.task_times_.controller_update)
         axis.controller_.update();  // uses position and velocity from encoder
