@@ -1,6 +1,7 @@
 
-#include "odrive_main.h"
 #include <algorithm>
+
+#include "odrive_main.h"
 
 bool Controller::apply_config() {
     config_.parent = this;
@@ -26,20 +27,19 @@ void Controller::set_error(Error error) {
 // Command Handling
 //--------------------------------
 
-
 void Controller::move_to_pos(float goal_point) {
     axis_->trap_traj_.planTrapezoidal(goal_point, pos_setpoint_, vel_setpoint_,
-                                 axis_->trap_traj_.config_.vel_limit,
-                                 axis_->trap_traj_.config_.accel_limit,
-                                 axis_->trap_traj_.config_.decel_limit);
+                                      axis_->trap_traj_.config_.vel_limit,
+                                      axis_->trap_traj_.config_.accel_limit,
+                                      axis_->trap_traj_.config_.decel_limit);
     axis_->trap_traj_.t_ = 0.0f;
     trajectory_done_ = false;
 }
 
-void Controller::move_incremental(float displacement, bool from_input_pos = true){
-    if(from_input_pos){
+void Controller::move_incremental(float displacement, bool from_input_pos = true) {
+    if (from_input_pos) {
         input_pos_ += displacement;
-    } else{
+    } else {
         input_pos_ = pos_setpoint_ + displacement;
     }
 
@@ -53,12 +53,11 @@ void Controller::start_anticogging_calibration() {
     }
 }
 
-
 /*
  * This anti-cogging implementation iterates through each encoder position,
  * waits for zero velocity & position error,
  * then samples the current required to maintain that position.
- * 
+ *
  * This holding current is added as a feedforward term in the control loop.
  */
 bool Controller::anticogging_calibration(float pos_estimate, float vel_estimate) {
@@ -89,8 +88,8 @@ bool Controller::anticogging_calibration(float pos_estimate, float vel_estimate)
 
 void Controller::update_filter_gains() {
     float bandwidth = std::min(config_.input_filter_bandwidth, 0.25f * current_meas_hz);
-    input_filter_ki_ = 2.0f * bandwidth;  // basic conversion to discrete time
-    input_filter_kp_ = 0.25f * (input_filter_ki_ * input_filter_ki_); // Critically damped
+    input_filter_ki_ = 2.0f * bandwidth;                               // basic conversion to discrete time
+    input_filter_kp_ = 0.25f * (input_filter_ki_ * input_filter_ki_);  // Critically damped
 }
 
 static float limitVel(const float vel_limit, const float vel_estimate, const float vel_gain, const float torque) {
@@ -142,7 +141,7 @@ bool Controller::update() {
         case INPUT_MODE_PASSTHROUGH: {
             pos_setpoint_ = input_pos_;
             vel_setpoint_ = input_vel_;
-            torque_setpoint_ = input_torque_; 
+            torque_setpoint_ = input_torque_ * flip_dir * (1 + delta_torque);
         } break;
         case INPUT_MODE_VEL_RAMP: {
             float max_step_size = std::abs(current_meas_period * config_.vel_ramp_rate);
@@ -161,7 +160,7 @@ bool Controller::update() {
         } break;
         case INPUT_MODE_POS_FILTER: {
             // 2nd order pos tracking filter
-            float delta_pos = input_pos_ - pos_setpoint_; // Pos error
+            float delta_pos = input_pos_ - pos_setpoint_;  // Pos error
             if (config_.circular_setpoints) {
                 if (!pos_wrap.has_value()) {
                     set_error(ERROR_INVALID_CIRCULAR_RANGE);
@@ -169,11 +168,11 @@ bool Controller::update() {
                 }
                 delta_pos = wrap_pm(delta_pos, *pos_wrap);
             }
-            float delta_vel = input_vel_ - vel_setpoint_; // Vel error
-            float accel = input_filter_kp_*delta_pos + input_filter_ki_*delta_vel; // Feedback
-            torque_setpoint_ = accel * config_.inertia; // Accel
-            vel_setpoint_ += current_meas_period * accel; // delta vel
-            pos_setpoint_ += current_meas_period * vel_setpoint_; // Delta pos
+            float delta_vel = input_vel_ - vel_setpoint_;                               // Vel error
+            float accel = input_filter_kp_ * delta_pos + input_filter_ki_ * delta_vel;  // Feedback
+            torque_setpoint_ = accel * config_.inertia;                                 // Accel
+            vel_setpoint_ += current_meas_period * accel;                               // delta vel
+            pos_setpoint_ += current_meas_period * vel_setpoint_;                       // Delta pos
         } break;
         case INPUT_MODE_MIRROR: {
             if (config_.axis_to_mirror < AXIS_COUNT) {
@@ -198,14 +197,14 @@ bool Controller::update() {
         //     // NOT YET IMPLEMENTED
         // } break;
         case INPUT_MODE_TRAP_TRAJ: {
-            if(input_pos_updated_){
+            if (input_pos_updated_) {
                 move_to_pos(input_pos_);
                 input_pos_updated_ = false;
             }
             // Avoid updating uninitialized trajectory
             if (trajectory_done_)
                 break;
-            
+
             if (axis_->trap_traj_.t_ > axis_->trap_traj_.Tf_) {
                 // Drop into position control mode when done to avoid problems on loop counter delta overflow
                 config_.control_mode = CONTROL_MODE_POSITION_CONTROL;
@@ -220,13 +219,13 @@ bool Controller::update() {
                 torque_setpoint_ = traj_step.Ydd * config_.inertia;
                 axis_->trap_traj_.t_ += current_meas_period;
             }
-            anticogging_pos_estimate = pos_setpoint_; // FF the position setpoint instead of the pos_estimate
+            anticogging_pos_estimate = pos_setpoint_;  // FF the position setpoint instead of the pos_estimate
         } break;
         case INPUT_MODE_TUNING: {
             autotuning_phase_ = wrap_pm_pi(autotuning_phase_ + (2.0f * M_PI * autotuning_.frequency * current_meas_period));
             float c = our_arm_cos_f32(autotuning_phase_);
             float s = our_arm_sin_f32(autotuning_phase_);
-            pos_setpoint_ = autotuning_.pos_amplitude * s; // + pos_amp_c * c
+            pos_setpoint_ = autotuning_.pos_amplitude * s;  // + pos_amp_c * c
             vel_setpoint_ = autotuning_.vel_amplitude * c;
             torque_setpoint_ = autotuning_.torque_amplitude * -s;
         } break;
@@ -234,7 +233,6 @@ bool Controller::update() {
             set_error(ERROR_INVALID_INPUT_MODE);
             return false;
         }
-        
     }
 
     // Position control
@@ -364,17 +362,16 @@ bool Controller::update() {
         } else {
             vel_integrator_torque_ += ((vel_integrator_gain * gain_scheduling_multiplier) * current_meas_period) * v_err;
         }
-        // integrator limiting to prevent windup 
+        // integrator limiting to prevent windup
         vel_integrator_torque_ = std::clamp(vel_integrator_torque_, -config_.vel_integrator_limit, config_.vel_integrator_limit);
     }
 
     float ideal_electrical_power = 0.0f;
     if (axis_->motor_.config_.motor_type != Motor::MOTOR_TYPE_GIMBAL) {
-        ideal_electrical_power = axis_->motor_.current_control_.power_ - \
-            SQ(axis_->motor_.current_control_.Iq_measured_) * 1.5f * axis_->motor_.config_.phase_resistance - \
-            SQ(axis_->motor_.current_control_.Id_measured_) * 1.5f * axis_->motor_.config_.phase_resistance;
-    }
-    else {
+        ideal_electrical_power = axis_->motor_.current_control_.power_ -
+                                 SQ(axis_->motor_.current_control_.Iq_measured_) * 1.5f * axis_->motor_.config_.phase_resistance -
+                                 SQ(axis_->motor_.current_control_.Id_measured_) * 1.5f * axis_->motor_.config_.phase_resistance;
+    } else {
         ideal_electrical_power = axis_->motor_.current_control_.power_;
     }
     mechanical_power_ += config_.mechanical_power_bandwidth * current_meas_period * (torque * *vel_estimate * M_PI * 2.0f - mechanical_power_);
@@ -389,16 +386,22 @@ bool Controller::update() {
         return false;
     }
 
+    // ****
     // here we decide when to flip the torque
     int32_t curr_shadow = axis_->encoder_.shadow_count_;
-    if (flip_torque_){
+    if (flip_torque_) {
         // here detect the position, decide whether to flip or not
-        if (((curr_shadow >= flip_position_) && (prev_shadow < flip_position_)) || 
-            ((curr_shadow <= flip_position_) && (prev_shadow > flip_position_)) ){
-                input_torque_ = -1.0f * input_torque_;
-            }
+        flip_error_ = curr_shadow - flip_position_;
+        if (((curr_shadow >= flip_position_) && (prev_shadow < flip_position_)) ||
+            ((curr_shadow <= flip_position_) && (prev_shadow > flip_position_))) {
+            flip_dir = -1.0f * flip_dir;
+            // input_torque_ = -1.0f * input_torque_;
+        }
+    } else {
+        flip_dir = 1.0f;
+        delta_torque = 0.0f;
+        flip_error_ = 0.0f;
     }
-
     // push current shadow count for next iteration
     prev_shadow = curr_shadow;
 

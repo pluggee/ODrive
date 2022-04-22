@@ -1033,6 +1033,9 @@ interfaces:
       flip_torque:
         type: bool
         doc: switch to flip torque at position
+      flip_error:
+        type: readonly int32
+        doc: flip position error
       flip_position:
         type: int32
         doc: threshold to flip torque direction

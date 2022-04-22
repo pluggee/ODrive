@@ -109,12 +109,16 @@ class Controller : public ODriveIntf::ControllerIntf {
     float input_filter_kp_ = 0.0f;
     float input_filter_ki_ = 0.0f;
 
+    // ****
     // experimental features here - pluggee
     bool flip_torque_ = false;
+    float flip_dir = 1.0f;
     // float flip_pos_ = 0.0f;
     uint32_t flip_counter_ = 0;
     int32_t flip_position_ = 8000;
     int32_t prev_shadow = 0;
+    int32_t flip_error_;
+    float delta_torque = 0.0f;
 
     Autotuning_t autotuning_;
     float autotuning_phase_ = 0.0f;

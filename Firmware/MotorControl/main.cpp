@@ -423,12 +423,15 @@ void ODrive::control_loop_cb(uint32_t timestamp) {
             axis.max_endstop_.update();
         }
 
+        // **** experimental features for flipping torque
         if (start_torque_flip_) {
-            axis.controller_.flip_position_ = axis.encoder_.shadow_count_;
+            axis.controller_.flip_position_ = axis.encoder_.shadow_count_ + 100;  // FIXME: code the offset somewhere
             axis.controller_.flip_torque_ = true;
             axis.controller_.config_.control_mode = Controller::CONTROL_MODE_TORQUE_CONTROL;
             axis.controller_.input_torque_ = flipping_torque_;
         }
+
+        // here we implement the higher level PID controller
 
         MEASURE_TIME(axis.task_times_.controller_update)
         axis.controller_.update();  // uses position and velocity from encoder
