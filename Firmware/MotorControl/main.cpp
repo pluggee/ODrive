@@ -433,6 +433,10 @@ void ODrive::control_loop_cb(uint32_t timestamp) {
 
         // here we implement the higher level PID controller
         // 1- calculate position error between both motors
+        //      - detect rising or faling crossing on motor 0
+        //      - calculate the offset between 0/1, in terms of lead/lag
+        //      - filter consecutive lead/lag, (make sure readings don't flip on every tick)
+
         // 2- calculate integral and differential errors
         // 3- evaluate delta_torque modulations for both motors
         // 4- inject delta torque into each motors, based on direction
