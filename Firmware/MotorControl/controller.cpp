@@ -388,19 +388,25 @@ bool Controller::update() {
 
     // ****
     // here we decide when to flip the torque
-    int32_t curr_shadow = axis_->encoder_.shadow_count_;
+    curr_shadow = axis_->encoder_.shadow_count_;
     if (flip_torque_) {
         // here detect the position, decide whether to flip or not
         flip_error_ = curr_shadow - flip_position_;
-        if (((curr_shadow >= flip_position_) && (prev_shadow < flip_position_)) ||
-            ((curr_shadow <= flip_position_) && (prev_shadow > flip_position_))) {
-            flip_dir = -1.0f * flip_dir;
-            // input_torque_ = -1.0f * input_torque_;
+        if ((curr_shadow >= (flip_position_ + flip_hys_)) && (prev_shadow < (flip_position_ + flip_hys_))) {
+            // rising edge, set boolean token
+            // token will be handled and reset by upper level
+            rising_edge = true,
+            flip_dir = -1.0f;
+        } else if ((curr_shadow <= (flip_position_ - flip_hys_)) && (prev_shadow > (flip_position_ - flip_hys_))) {
+            // falling edge, set boolean token
+            // token will be handled and reset by upper level
+            falling_edge = true;
+            flip_dir = 1.0f;
         }
     } else {
         flip_dir = 1.0f;
         delta_torque = 0.0f;
-        flip_error_ = 0.0f;
+        flip_error_ = 0;
     }
     // push current shadow count for next iteration
     prev_shadow = curr_shadow;

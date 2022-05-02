@@ -431,16 +431,6 @@ void ODrive::control_loop_cb(uint32_t timestamp) {
             axis.controller_.input_torque_ = flipping_torque_;
         }
 
-        // here we implement the higher level PID controller
-        // 1- calculate position error between both motors
-        //      - detect rising or faling crossing on motor 0
-        //      - calculate the offset between 0/1, in terms of lead/lag
-        //      - filter consecutive lead/lag, (make sure readings don't flip on every tick)
-
-        // 2- calculate integral and differential errors
-        // 3- evaluate delta_torque modulations for both motors
-        // 4- inject delta torque into each motors, based on direction
-
         MEASURE_TIME(axis.task_times_.controller_update)
         axis.controller_.update();  // uses position and velocity from encoder
 
@@ -455,6 +445,34 @@ void ODrive::control_loop_cb(uint32_t timestamp) {
     }
 
     start_torque_flip_ = false;
+
+    // here we implement the higher level PID controller
+    // 1- calculate position error between both motors
+    //      - detect rising or faling crossing on motor 0
+    //      - calculate the offset between 0/1, in terms of lead/lag
+    //      - filter consecutive lead/lag, (make sure readings don't flip on every tick)
+
+    if (axes[0].controller_.rising_edge) {
+        // handle motor 0 rising edge
+        axes[0].controller_.rising_edge = false;                                          // reset token
+        delta_flip_ = axes[0].controller_.flip_error_ - axes[1].controller_.flip_error_;  // rising +ve error
+    } else if (axes[0].controller_.falling_edge) {
+        // handle motor 0 falling edge
+        axes[0].controller_.falling_edge = false;                                         // reset token
+        delta_flip_ = axes[1].controller_.flip_error_ - axes[0].controller_.flip_error_;  // rising -ve error
+    }
+
+    if (axes[1].controller_.rising_edge) {
+        // handle motor 1 rising edge
+        axes[1].controller_.rising_edge = false;  // reset token
+    } else if (axes[1].controller_.falling_edge) {
+        // handle motor 1 falling edge
+        axes[1].controller_.falling_edge = false;  // reset token
+    }
+
+    // 2- calculate integral and differential errors
+    // 3- evaluate delta_torque modulations for both motors
+    // 4- inject delta torque into each motors, based on direction
 
     // Tell the axis threads that the control loop has finished
     for (auto& axis : axes) {

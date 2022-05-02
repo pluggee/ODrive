@@ -116,9 +116,13 @@ class Controller : public ODriveIntf::ControllerIntf {
     // float flip_pos_ = 0.0f;
     uint32_t flip_counter_ = 0;
     int32_t flip_position_ = 8000;
+    int32_t curr_shadow;
     int32_t prev_shadow = 0;
     int32_t flip_error_;
+    int32_t flip_hys_ = 20;
     float delta_torque = 0.0f;
+    bool rising_edge = false;
+    bool falling_edge = false;
 
     Autotuning_t autotuning_;
     float autotuning_phase_ = 0.0f;

@@ -122,6 +122,8 @@ interfaces:
        type: bool
       flipping_torque: 
        type: float32
+      delta_flip:
+       type: readonly int32
       # Diagnostics & performance monitoring
       n_evt_sampling: {type: readonly uint32, doc: Number of input sampling events since startup (modulo 2^32)}
       n_evt_control_loop: {type: readonly uint32, doc: Number of control loop iterations since startup (modulo 2^32)}
@@ -1039,6 +1041,9 @@ interfaces:
       flip_position:
         type: int32
         doc: threshold to flip torque direction
+      flip_hys:
+        type: int32
+        doc: position hysteresis for flipping torque
       vel_setpoint:
         type: readonly float32
         unit: turn/s
