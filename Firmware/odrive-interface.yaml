@@ -120,6 +120,8 @@ interfaces:
       # Torque flip control
       start_torque_flip: 
        type: bool
+      zero_flip_position:
+       type: bool
       flipping_torque: 
        type: float32
       delta_flip:

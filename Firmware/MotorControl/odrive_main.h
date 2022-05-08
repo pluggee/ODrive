@@ -248,6 +248,7 @@ class ODrive : public ODriveIntf {
 
     // torque direction control
     bool start_torque_flip_ = false;
+    bool zero_flip_position_ = false;
     float flipping_torque_ = 0.0f;
     int32_t delta_flip_ = 0;
 };

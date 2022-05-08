@@ -106,12 +106,21 @@ ax1state = odrv0.axis1.current_state
 print('Axis 0 state: ' + str(ax0state))
 print('Axis 1 state: ' + str(ax1state))
 
-time.sleep(5)
+# load flip hysteresis values
+odrv0.axis0.controller.flip_hys = 100
+odrv0.axis1.controller.flip_hys = 100
 
-#odrv0.axis0.controller.input_torque = 0.1
-#odrv0.axis1.controller.input_torque = 0.1
+ax0_position = odrv0.axis0.encoder.shadow_count
+ax1_position = odrv0.axis1.encoder.shadow_count
+print('AXIS 0 position = ' + str(ax0_position))
+print('AXIS 1 position = ' + str(ax1_position))
+
+# reposition each motor at flipping threshold
+# print('Moving motors to threshold positions')
+# odrv0.axis0.controller.config.control_mode = CONTROL_MODE_POSITION_CONTROL
+# odrv0.axis1.controller.config.control_mode = CONTROL_MODE_POSITION_CONTROL
 
 # place both motors in flipping torque mode
-odrv0.flipping_torque = 0.05 
-odrv0.start_torque_flip = True
+# odrv0.flipping_torque = 0.05 
+# odrv0.start_torque_flip = True
 

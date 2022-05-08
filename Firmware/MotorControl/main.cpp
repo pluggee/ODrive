@@ -425,10 +425,14 @@ void ODrive::control_loop_cb(uint32_t timestamp) {
 
         // **** experimental features for flipping torque
         if (start_torque_flip_) {
-            axis.controller_.flip_position_ = axis.encoder_.shadow_count_ + 100;  // FIXME: code the offset somewhere
             axis.controller_.flip_torque_ = true;
             axis.controller_.config_.control_mode = Controller::CONTROL_MODE_TORQUE_CONTROL;
             axis.controller_.input_torque_ = flipping_torque_;
+        }
+
+        // **** set zero center position for torque flipping
+        if (zero_flip_position_) {
+            axis.controller_.flip_position_ = axis.encoder_.shadow_count_;
         }
 
         MEASURE_TIME(axis.task_times_.controller_update)
@@ -444,7 +448,8 @@ void ODrive::control_loop_cb(uint32_t timestamp) {
         axis.motor_.current_control_.update(timestamp);  // uses the output of controller_ or open_loop_contoller_ and encoder_ or sensorless_estimator_ or acim_estimator_
     }
 
-    start_torque_flip_ = false;
+    start_torque_flip_ = false;   // resetting
+    zero_flip_position_ = false;  // resetting
 
     // here we implement the higher level PID controller
     // 1- calculate position error between both motors
