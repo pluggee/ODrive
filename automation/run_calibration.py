@@ -107,8 +107,8 @@ print('Axis 0 state: ' + str(ax0state))
 print('Axis 1 state: ' + str(ax1state))
 
 # load flip hysteresis values
-odrv0.axis0.controller.flip_hys = 100
-odrv0.axis1.controller.flip_hys = 100
+odrv0.axis0.controller.flip_hys = 10
+odrv0.axis1.controller.flip_hys = 10
 
 ax0_position = odrv0.axis0.encoder.shadow_count
 ax1_position = odrv0.axis1.encoder.shadow_count

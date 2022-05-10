@@ -15,4 +15,6 @@ print('| stopping all motors')
 odrv0.axis0.requested_state = AXIS_STATE_IDLE
 odrv0.axis1.requested_state = AXIS_STATE_IDLE
 
+odrv0.axis0.controller.flip_torque = False
+odrv0.axis1.controller.flip_torque = False
 
