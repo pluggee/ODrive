@@ -12,9 +12,9 @@ odrv0.clear_errors()
 print('---------------------------------------------------------------')
 print('| stopping all motors')
 
-odrv0.axis0.requested_state = AXIS_STATE_IDLE
-odrv0.axis1.requested_state = AXIS_STATE_IDLE
+# # place both motors in flipping torque mode
+odrv0.flipping_torque = 0
+odrv0.start_torque_flip = True
 
 odrv0.axis0.controller.flip_torque = False
 odrv0.axis1.controller.flip_torque = False
-

@@ -15,8 +15,8 @@ odrv0.axis0.motor.config.current_lim = 50
 odrv0.axis1.motor.config.current_lim = 50
 
 # angular velocity limit, turns/s
-odrv0.axis0.controller.config.vel_limit = 10
-odrv0.axis1.controller.config.vel_limit = 10
+odrv0.axis0.controller.config.vel_limit = 10000
+odrv0.axis1.controller.config.vel_limit = 10000
 
 # motor pole pairs
 odrv0.axis0.motor.config.pole_pairs = 7
@@ -56,10 +56,10 @@ vbus = odrv0.vbus_voltage
 ibus = odrv0.ibus
 serialnum = odrv0.serial_number
 hw_version = str(odrv0.hw_version_major) + '.' + str(odrv0.hw_version_minor)\
-        + '.' + str(odrv0.hw_version_variant)
+    + '.' + str(odrv0.hw_version_variant)
 
 fw_version = str(odrv0.fw_version_major) + '.' + str(odrv0.fw_version_minor)\
-        + '.' + str(odrv0.fw_version_revision)
+    + '.' + str(odrv0.fw_version_revision)
 
 if (odrv0.fw_version_unreleased != 0):
     fw_release_stat = 'Unreleased'
@@ -121,6 +121,5 @@ print('AXIS 1 position = ' + str(ax1_position))
 # odrv0.axis1.controller.config.control_mode = CONTROL_MODE_POSITION_CONTROL
 
 # place both motors in flipping torque mode
-# odrv0.flipping_torque = 0.05 
+# odrv0.flipping_torque = 0.05
 # odrv0.start_torque_flip = True
-
