@@ -1046,6 +1046,15 @@ interfaces:
       flip_hys:
         type: int32
         doc: position hysteresis for flipping torque
+      flip_period:
+        type: uint32
+        doc: period between flipping torque
+      flip_period_rise:
+        type: uint32
+        doc: period between flipping torque (rising edge)
+      flip_period_fall:
+        type: uint32
+        doc: period between flipping torque (falling edge)
       vel_setpoint:
         type: readonly float32
         unit: turn/s

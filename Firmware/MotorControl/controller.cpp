@@ -397,11 +397,20 @@ bool Controller::update() {
             // token will be handled and reset by upper level
             rising_edge = true,
             flip_dir = -1.0f;
+            flip_period_ = flip_counter;
+            flip_period_rise_ = flip_counter;
+            flip_counter = 0;
         } else if ((curr_shadow <= (flip_position_ - flip_hys_)) && (prev_shadow > (flip_position_ - flip_hys_))) {
             // falling edge, set boolean token
             // token will be handled and reset by upper level
             falling_edge = true;
             flip_dir = 1.0f;
+            flip_period_ = flip_counter;
+            flip_period_fall_ = flip_counter;
+            flip_counter = 0;
+        } else {
+            // increment counter
+            flip_counter++;  // calculates the period between flipping points
         }
     } else {
         flip_dir = 1.0f;
