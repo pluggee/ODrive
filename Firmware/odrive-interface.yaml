@@ -124,8 +124,12 @@ interfaces:
        type: bool
       flipping_torque: 
        type: float32
-      delta_flip:
+      delta_position:
        type: readonly int32
+       doc: measures position error over torque crossing point
+      delta_period:
+       type: readonly int32
+       doc: measures period (1/freq) error over torque crossing point
       # Diagnostics & performance monitoring
       n_evt_sampling: {type: readonly uint32, doc: Number of input sampling events since startup (modulo 2^32)}
       n_evt_control_loop: {type: readonly uint32, doc: Number of control loop iterations since startup (modulo 2^32)}
@@ -1047,13 +1051,13 @@ interfaces:
         type: int32
         doc: position hysteresis for flipping torque
       flip_period:
-        type: uint32
+        type: int32
         doc: period between flipping torque
       flip_period_rise:
-        type: uint32
+        type: int32
         doc: period between flipping torque (rising edge)
       flip_period_fall:
-        type: uint32
+        type: int32
         doc: period between flipping torque (falling edge)
       vel_setpoint:
         type: readonly float32
