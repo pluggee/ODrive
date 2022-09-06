@@ -117,5 +117,6 @@ odrv0.axis0.motor.config.current_lim = 10
 odrv0.axis1.motor.config.current_lim = 10
 odrv0.axis0.controller.config.vel_limit = 20
 odrv0.axis1.controller.config.vel_limit = 20
-odrv0.flipping_torque = 0.1
+#odrv0.flipping_torque = 0.1
+odrv0.flipping_torque = 0.05
 odrv0.start_torque_flip = True
