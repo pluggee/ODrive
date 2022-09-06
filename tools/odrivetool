@@ -161,10 +161,15 @@ try:
         # If you want to plot different values, change them here.
         # You can plot any number of values concurrently.
         cancellation_token = start_liveplotter(lambda: [
-            #my_odrive.axis0.encoder.pos_estimate,
-            #my_odrive.axis1.encoder.pos_estimate,
-            my_odrive.axis0.controller.flip_error,
-            my_odrive.axis1.controller.flip_error,
+            # my_odrive.axis0.encoder.pos_estimate,
+            # my_odrive.axis1.encoder.pos_estimate,
+            # my_odrive.axis0.controller.flip_error,
+            # my_odrive.axis1.controller.flip_error,
+            # my_odrive.axis0.controller.flip_period,
+            # my_odrive.axis1.controller.flip_period,
+            # my_odrive.axis0.controller.flip_period_rise,
+            # my_odrive.axis0.controller.flip_period_fall,
+            my_odrive.delta_period,
         ])
 
 
