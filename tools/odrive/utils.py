@@ -132,9 +132,9 @@ def oscilloscope_dump(odrv, num_vals, filename='oscilloscope.csv'):
             f.write(str(odrv.oscilloscope.get_val(x)))
             f.write('\n')
 
-data_rate = 200
-plot_rate = 10
-num_samples = 500
+data_rate = 400
+plot_rate = 20
+num_samples = 100
 def start_liveplotter(get_var_callback):
     """
     Starts a liveplotter.
