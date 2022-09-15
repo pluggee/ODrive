@@ -169,9 +169,24 @@ try:
             # my_odrive.axis1.controller.flip_period,
             # my_odrive.axis0.controller.flip_period_rise,
             # my_odrive.axis0.controller.flip_period_fall,
-            my_odrive.delta_position,
-            my_odrive.delta_period,
-            my_odrive.delta_period_avg,
+
+            # my_odrive.axis0.controller.delta_torque,
+            # my_odrive.axis1.controller.delta_torque,
+
+            my_odrive.axis0.controller.flip_period,
+            my_odrive.axis1.controller.flip_period,
+
+            # my_odrive.axis0.controller.torque_setpoint,
+            # my_odrive.axis1.controller.torque_setpoint,
+
+            # my_odrive.error_period,
+            # my_odrive.errorCum_period,
+            # my_odrive.errorDer_period,
+
+            # my_odrive.delta_position,
+            # my_odrive.delta_period,
+            # my_odrive.delta_period_pct,
+            # my_odrive.delta_period_avg,
         ])
 
 

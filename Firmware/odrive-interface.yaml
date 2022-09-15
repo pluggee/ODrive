@@ -130,9 +130,33 @@ interfaces:
       delta_period:
        type: readonly int32
        doc: measures period (1/freq) error over torque crossing point
+      delta_period_pct:
+       type: readonly int32
+       doc: measures period (1/freq) error over torque crossing point (normalizes as % of 0,1 periods averaged)
       delta_period_avg:
        type: readonly int32
        doc: measures period (1/freq) error over torque crossing point (averaged)
+      error_period:
+        type: readonly int32
+        doc: period/velocity PID error
+      errorCum_period:
+        type: readonly int32
+        doc: period/velocity PID cumulative error
+      errorDer_period:
+        type: readonly int32
+        doc: period/velocity PID derivative error
+      delta_torque_limit:
+        type: float32
+        doc: magnitude limit for torque adjustment
+      KP_period:
+        type: float32
+        doc: period/velocity PID KP
+      KI_period:
+        type: float32
+        doc: period/velocity PID KI
+      KD_period:
+        type: float32
+        doc: period/velocity PID KD
       # Diagnostics & performance monitoring
       n_evt_sampling: {type: readonly uint32, doc: Number of input sampling events since startup (modulo 2^32)}
       n_evt_control_loop: {type: readonly uint32, doc: Number of control loop iterations since startup (modulo 2^32)}
@@ -1062,6 +1086,9 @@ interfaces:
       flip_period_fall:
         type: int32
         doc: period between flipping torque (falling edge)
+      delta_torque:
+        type: readonly float32
+        doc: delta torque for PID control
       vel_setpoint:
         type: readonly float32
         unit: turn/s

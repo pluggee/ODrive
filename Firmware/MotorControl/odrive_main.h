@@ -256,8 +256,19 @@ class ODrive : public ODriveIntf {
     int32_t delta_position_ = 0;
     int32_t delta_period_ = 0;
     int32_t delta_period_avg_ = 0;
+    int32_t delta_period_pct_ = 0;
     int32_t delta_period_mem[NUM_DPERIOD_AVG];
     int8_t ptr_delta_period_avg = 0;
+    bool update_period_pid = false;    // this triggers torque PID update for
+    int32_t error_period_ = 0;         // error
+    int32_t errorCum_period_ = 0;      // integral error
+    int32_t errorDer_period_ = 0;      // derivative error
+    int32_t lastError_period_ = 0;     // previous value
+    float KP_period_ = 0.0005f;        // PID P constant
+    float KI_period_ = 0.001f;         // PID I  constant
+    float KD_period_ = 0.0001f;        // PID D constant
+    int32_t diff_period_ = 0;          // this is the velocity (or period) control error to align position
+    float delta_torque_limit_ = 0.1f;  // magnitude limit of torque adjustment
 };
 
 extern ODrive odrv;  // defined in main.cpp

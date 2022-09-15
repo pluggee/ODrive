@@ -462,6 +462,7 @@ void ODrive::control_loop_cb(uint32_t timestamp) {
         axes[0].controller_.rising_edge = false;                                              // reset token
         delta_position_ = axes[0].controller_.flip_error_ - axes[1].controller_.flip_error_;  // rising error
         delta_period_ = axes[1].controller_.flip_period_ - axes[0].controller_.flip_period_;  // delta period (1/freq)
+        delta_period_pct_ = 200 * delta_period_ / (axes[1].controller_.flip_period_ + axes[0].controller_.flip_period_);
         delta_period_mem[ptr_delta_period_avg] = delta_period_;
         ptr_delta_period_avg++;
         delta_period_avg_ = 0;
@@ -469,11 +470,13 @@ void ODrive::control_loop_cb(uint32_t timestamp) {
             delta_period_avg_ += delta_period_mem[i];
         }
         delta_period_avg_ = delta_period_avg_ / NUM_DPERIOD_AVG;  // TODO: replace integer division with faster bitshift implementation (powerof2)
+        update_period_pid = true;
     } else if (axes[0].controller_.falling_edge) {
         // handle motor 0 falling edge
         axes[0].controller_.falling_edge = false;                                             // reset token
         delta_position_ = axes[1].controller_.flip_error_ - axes[0].controller_.flip_error_;  // falling error
         delta_period_ = axes[1].controller_.flip_period_ - axes[0].controller_.flip_period_;  // delta period (1/freq)
+        delta_period_pct_ = 200 * delta_period_ / (axes[1].controller_.flip_period_ + axes[0].controller_.flip_period_);
         delta_period_mem[ptr_delta_period_avg] = delta_period_;
         ptr_delta_period_avg++;
         delta_period_avg_ = 0;
@@ -481,6 +484,7 @@ void ODrive::control_loop_cb(uint32_t timestamp) {
             delta_period_avg_ += delta_period_mem[i];
         }
         delta_period_avg_ = delta_period_avg_ / NUM_DPERIOD_AVG;  // TODO: replace integer division with faster bitshift implementation (powerof2)
+        update_period_pid = true;
     }
 
     if (ptr_delta_period_avg >= NUM_DPERIOD_AVG)
@@ -495,6 +499,27 @@ void ODrive::control_loop_cb(uint32_t timestamp) {
     }
 
     // 2- calculate integral and differential errors
+    // delta period (velocity) error = delta_period_pct_
+    if (update_period_pid) {
+        error_period_ = delta_period_pct_;                     // *P
+        errorCum_period_ += error_period_;                     // *I
+        errorDer_period_ = error_period_ - lastError_period_;  // *D
+        // calculate the torque difference to be applied for the PID loop
+        float torque_delta = KP_period_ * (float)error_period_ + KI_period_ * (float)errorCum_period_ +
+                             KD_period_ * errorDer_period_;
+        // check if torque delta saturates beyond limits
+        if (torque_delta > delta_torque_limit_) {
+            torque_delta = delta_torque_limit_;
+        } else if (torque_delta < (-1 * delta_torque_limit_)) {
+            torque_delta = -1 * delta_torque_limit_;
+        }
+
+        axes[1].controller_.delta_torque_ = torque_delta;
+        axes[0].controller_.delta_torque_ = -1 * torque_delta;
+
+        update_period_pid = false;  // reset
+    }
+
     // 3- evaluate delta_torque modulations for both motors
     // 4- inject delta torque into each motors, based on direction
 

@@ -141,7 +141,7 @@ bool Controller::update() {
         case INPUT_MODE_PASSTHROUGH: {
             pos_setpoint_ = input_pos_;
             vel_setpoint_ = input_vel_;
-            torque_setpoint_ = input_torque_ * flip_dir * (1 + delta_torque);
+            torque_setpoint_ = input_torque_ * flip_dir * (1 + delta_torque_);
         } break;
         case INPUT_MODE_VEL_RAMP: {
             float max_step_size = std::abs(current_meas_period * config_.vel_ramp_rate);
@@ -414,7 +414,7 @@ bool Controller::update() {
         }
     } else {
         flip_dir = 1.0f;
-        delta_torque = 0.0f;
+        delta_torque_ = 0.0f;
         flip_error_ = 0;
     }
     // push current shadow count for next iteration

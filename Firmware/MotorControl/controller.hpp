@@ -120,7 +120,7 @@ class Controller : public ODriveIntf::ControllerIntf {
     int32_t prev_shadow = 0;
     int32_t flip_error_;
     int32_t flip_hys_ = 20;
-    float delta_torque = 0.0f;
+    float delta_torque_ = 0.0f;
     bool rising_edge = false;
     bool falling_edge = false;
     int32_t flip_counter = 0;       // used to calculate the period between flipping torque (in ticks)
