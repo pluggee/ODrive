@@ -169,7 +169,9 @@ try:
             # my_odrive.axis1.controller.flip_period,
             # my_odrive.axis0.controller.flip_period_rise,
             # my_odrive.axis0.controller.flip_period_fall,
+            my_odrive.delta_position,
             my_odrive.delta_period,
+            my_odrive.delta_period_avg,
         ])
 
 

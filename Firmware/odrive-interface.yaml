@@ -130,6 +130,9 @@ interfaces:
       delta_period:
        type: readonly int32
        doc: measures period (1/freq) error over torque crossing point
+      delta_period_avg:
+       type: readonly int32
+       doc: measures period (1/freq) error over torque crossing point (averaged)
       # Diagnostics & performance monitoring
       n_evt_sampling: {type: readonly uint32, doc: Number of input sampling events since startup (modulo 2^32)}
       n_evt_control_loop: {type: readonly uint32, doc: Number of control loop iterations since startup (modulo 2^32)}

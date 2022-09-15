@@ -461,26 +461,26 @@ void ODrive::control_loop_cb(uint32_t timestamp) {
         // handle motor 0 rising edge
         axes[0].controller_.rising_edge = false;                                              // reset token
         delta_position_ = axes[0].controller_.flip_error_ - axes[1].controller_.flip_error_;  // rising error
-        // delta_period_ = axes[1].controller_.flip_period_ - axes[0].controller_.flip_period_;  // delta period (1/freq)
-        delta_period_avg[ptr_delta_period_avg] = axes[1].controller_.flip_period_ - axes[0].controller_.flip_period_;
+        delta_period_ = axes[1].controller_.flip_period_ - axes[0].controller_.flip_period_;  // delta period (1/freq)
+        delta_period_mem[ptr_delta_period_avg] = delta_period_;
         ptr_delta_period_avg++;
-        delta_period_ = 0;
+        delta_period_avg_ = 0;
         for (int i = 0; i < NUM_DPERIOD_AVG; i++) {
-            delta_period_ += delta_period_avg[i];
+            delta_period_avg_ += delta_period_mem[i];
         }
-        delta_period_ = delta_period_ / NUM_DPERIOD_AVG;  // TODO: replace integer division with faster bitshift implementation (powerof2)
+        delta_period_avg_ = delta_period_avg_ / NUM_DPERIOD_AVG;  // TODO: replace integer division with faster bitshift implementation (powerof2)
     } else if (axes[0].controller_.falling_edge) {
         // handle motor 0 falling edge
         axes[0].controller_.falling_edge = false;                                             // reset token
         delta_position_ = axes[1].controller_.flip_error_ - axes[0].controller_.flip_error_;  // falling error
-        // delta_period_ = axes[1].controller_.flip_period_ - axes[0].controller_.flip_period_;  // delta period (1/freq)
-        delta_period_avg[ptr_delta_period_avg] = axes[1].controller_.flip_period_ - axes[0].controller_.flip_period_;
+        delta_period_ = axes[1].controller_.flip_period_ - axes[0].controller_.flip_period_;  // delta period (1/freq)
+        delta_period_mem[ptr_delta_period_avg] = delta_period_;
         ptr_delta_period_avg++;
-        delta_period_ = 0;
+        delta_period_avg_ = 0;
         for (int i = 0; i < NUM_DPERIOD_AVG; i++) {
-            delta_period_ += delta_period_avg[i];
+            delta_period_avg_ += delta_period_mem[i];
         }
-        delta_period_ = delta_period_ / NUM_DPERIOD_AVG;  // TODO: replace integer division with faster bitshift implementation (powerof2)
+        delta_period_avg_ = delta_period_avg_ / NUM_DPERIOD_AVG;  // TODO: replace integer division with faster bitshift implementation (powerof2)
     }
 
     if (ptr_delta_period_avg >= NUM_DPERIOD_AVG)

@@ -137,7 +137,7 @@ class Motor;
     inline ENUMTYPE operator~(ENUMTYPE a) { return static_cast<ENUMTYPE>(~static_cast<std::underlying_type_t<ENUMTYPE>>(a)); }
 
 // TODO: experimental, should move away #define
-#define NUM_DPERIOD_AVG 16  // averaging samples for delta_period
+#define NUM_DPERIOD_AVG 8  // averaging samples for delta_period
 
 #include "autogen/interfaces.hpp"
 
@@ -255,7 +255,8 @@ class ODrive : public ODriveIntf {
     float flipping_torque_ = 0.0f;
     int32_t delta_position_ = 0;
     int32_t delta_period_ = 0;
-    int32_t delta_period_avg[NUM_DPERIOD_AVG];
+    int32_t delta_period_avg_ = 0;
+    int32_t delta_period_mem[NUM_DPERIOD_AVG];
     int8_t ptr_delta_period_avg = 0;
 };
 
