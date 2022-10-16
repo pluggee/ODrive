@@ -515,7 +515,8 @@ void ODrive::control_loop_cb(uint32_t timestamp) {
         }
 
         axes[1].controller_.delta_torque_ = -1 * torque_delta;
-        axes[0].controller_.delta_torque_ = torque_delta;
+        // axes[0].controller_.delta_torque_ = torque_delta;
+        axes[0].controller_.delta_torque_ = 0.0;
 
         update_period_pid = false;  // reset
     }

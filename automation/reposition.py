@@ -14,6 +14,7 @@ odrv0.config.brake_resistance = 0
 odrv0.config.dc_max_positive_current = 100
 odrv0.config.dc_max_negative_current = -100
 odrv0.config.enable_brake_resistor = False
+odrv0.delta_torque_limit = 0.01
 
 # set motion mode to trajectory control
 odrv0.axis0.trap_traj.config.vel_limit = 2
@@ -122,6 +123,6 @@ odrv0.axis0.motor.config.current_lim = 10
 odrv0.axis1.motor.config.current_lim = 10
 odrv0.axis0.controller.config.vel_limit = 20
 odrv0.axis1.controller.config.vel_limit = 20
-odrv0.flipping_torque = 0.1
-#odrv0.flipping_torque = 0.05
+odrv0.flipping_torque = 0.15
+# odrv0.flipping_torque = 0.05
 odrv0.start_torque_flip = True
