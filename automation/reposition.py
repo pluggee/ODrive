@@ -9,6 +9,11 @@ odrv0 = odrive.find_any()
 
 cpr = 2400      # constant
 
+# setup for battery assisted operation, disable brake resistance
+odrv0.config.brake_resistance = 0
+odrv0.config.dc_max_positive_current = 100
+odrv0.config.dc_max_negative_current = -100
+odrv0.config.enable_brake_resistor = False
 
 # set motion mode to trajectory control
 odrv0.axis0.trap_traj.config.vel_limit = 2
@@ -17,8 +22,8 @@ odrv0.axis0.trap_traj.config.accel_limit = 1
 odrv0.axis1.trap_traj.config.accel_limit = 1
 odrv0.axis0.trap_traj.config.decel_limit = 1
 odrv0.axis1.trap_traj.config.decel_limit = 1
-odrv0.axis0.motor.config.current_lim = 10
-odrv0.axis1.motor.config.current_lim = 10
+odrv0.axis0.motor.config.current_lim = 100
+odrv0.axis1.motor.config.current_lim = 100
 odrv0.axis0.controller.config.vel_limit = 8
 odrv0.axis1.controller.config.vel_limit = 8
 odrv0.axis0.controller.config.input_mode = INPUT_MODE_TRAP_TRAJ
@@ -117,6 +122,6 @@ odrv0.axis0.motor.config.current_lim = 10
 odrv0.axis1.motor.config.current_lim = 10
 odrv0.axis0.controller.config.vel_limit = 20
 odrv0.axis1.controller.config.vel_limit = 20
-#odrv0.flipping_torque = 0.1
-odrv0.flipping_torque = 0.05
+odrv0.flipping_torque = 0.1
+#odrv0.flipping_torque = 0.05
 odrv0.start_torque_flip = True

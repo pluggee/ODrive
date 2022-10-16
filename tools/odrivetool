@@ -170,11 +170,11 @@ try:
             # my_odrive.axis0.controller.flip_period_rise,
             # my_odrive.axis0.controller.flip_period_fall,
 
-            # my_odrive.axis0.controller.delta_torque,
-            # my_odrive.axis1.controller.delta_torque,
+            my_odrive.axis0.controller.delta_torque,
+            my_odrive.axis1.controller.delta_torque,
 
-            my_odrive.axis0.controller.flip_period,
-            my_odrive.axis1.controller.flip_period,
+            # my_odrive.axis0.controller.flip_period,
+            # my_odrive.axis1.controller.flip_period,
 
             # my_odrive.axis0.controller.torque_setpoint,
             # my_odrive.axis1.controller.torque_setpoint,
