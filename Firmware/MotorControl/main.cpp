@@ -461,8 +461,8 @@ void ODrive::control_loop_cb(uint32_t timestamp) {
         // handle motor 0 rising edge
         axes[0].controller_.rising_edge = false;                                              // reset token
         delta_position_ = axes[0].controller_.flip_error_ - axes[1].controller_.flip_error_;  // rising error
-        delta_period_ = axes[1].controller_.flip_period_ - axes[0].controller_.flip_period_;  // delta period (1/freq)
-        delta_period_pct_ = 200 * delta_period_ / (axes[1].controller_.flip_period_ + axes[0].controller_.flip_period_);
+        delta_period_ = axes[0].controller_.flip_period_ - axes[1].controller_.flip_period_;  // delta period (1/freq)
+        delta_period_pct_ = 200 * delta_period_ / (axes[0].controller_.flip_period_ + axes[1].controller_.flip_period_);
         delta_period_mem[ptr_delta_period_avg] = delta_period_;
         ptr_delta_period_avg++;
         delta_period_avg_ = 0;
@@ -474,9 +474,9 @@ void ODrive::control_loop_cb(uint32_t timestamp) {
     } else if (axes[0].controller_.falling_edge) {
         // handle motor 0 falling edge
         axes[0].controller_.falling_edge = false;                                             // reset token
-        delta_position_ = axes[1].controller_.flip_error_ - axes[0].controller_.flip_error_;  // falling error
-        delta_period_ = axes[1].controller_.flip_period_ - axes[0].controller_.flip_period_;  // delta period (1/freq)
-        delta_period_pct_ = 200 * delta_period_ / (axes[1].controller_.flip_period_ + axes[0].controller_.flip_period_);
+        delta_position_ = axes[0].controller_.flip_error_ - axes[1].controller_.flip_error_;  // falling error
+        delta_period_ = axes[0].controller_.flip_period_ - axes[1].controller_.flip_period_;  // delta period (1/freq)
+        delta_period_pct_ = 200 * delta_period_ / (axes[0].controller_.flip_period_ + axes[1].controller_.flip_period_);
         delta_period_mem[ptr_delta_period_avg] = delta_period_;
         ptr_delta_period_avg++;
         delta_period_avg_ = 0;
@@ -514,8 +514,8 @@ void ODrive::control_loop_cb(uint32_t timestamp) {
             torque_delta = -1 * delta_torque_limit_;
         }
 
-        axes[1].controller_.delta_torque_ = torque_delta;
-        axes[0].controller_.delta_torque_ = -1 * torque_delta;
+        axes[1].controller_.delta_torque_ = -1 * torque_delta;
+        axes[0].controller_.delta_torque_ = torque_delta;
 
         update_period_pid = false;  // reset
     }

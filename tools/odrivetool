@@ -189,9 +189,6 @@ try:
             # my_odrive.delta_period_avg,
         ])
 
-
-
-
         print("Showing plot. Press Ctrl+C to exit.")
         while not cancellation_token.is_set():
             time.sleep(1)
