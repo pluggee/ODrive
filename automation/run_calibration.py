@@ -103,12 +103,9 @@ time.sleep(1)
 ax0state = odrv0.axis0.current_state
 ax1state = odrv0.axis1.current_state
 
-print('Axis 0 state: ' + str(ax0state))
-print('Axis 1 state: ' + str(ax1state))
-
-# load flip hysteresis values
-odrv0.axis0.controller.flip_hys = 10
-odrv0.axis1.controller.flip_hys = 10
+print()
+print('Axis 0 state    = ' + str(ax0state))
+print('Axis 1 state:   = ' + str(ax1state))
 
 ax0_position = odrv0.axis0.encoder.shadow_count
 ax1_position = odrv0.axis1.encoder.shadow_count

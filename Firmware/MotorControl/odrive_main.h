@@ -252,9 +252,9 @@ class ODrive : public ODriveIntf {
     int32_t pos_a1_ = 0;
     int32_t pos_b0_ = 0;
     int32_t pos_b1_ = 0;
-    int32_t pos_error0, pos_error1;
-    float traj_pos_error_ = 10;
-    bool traj_ab = false;
+    int32_t pos_error0_, pos_error1_;
+    int32_t traj_pos_error_ = 10;
+    bool traj_ab_ = false;
 };
 
 extern ODrive odrv;  // defined in main.cpp

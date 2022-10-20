@@ -176,6 +176,9 @@ interfaces:
       pos_b0: int32
       pos_b1: int32
       traj_pos_error: int32
+      traj_ab: bool
+      pos_error0: int32
+      pos_error1: int32
       misconfigured:
         # TODO: make this a system error
         type: readonly bool
