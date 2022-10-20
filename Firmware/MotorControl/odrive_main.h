@@ -248,11 +248,11 @@ class ODrive : public ODriveIntf {
 
     // trajectory control variables here
     bool enable_traj_ctrl_ = false;
-    float pos_a0_ = 0;
-    float pos_a1_ = 0;
-    float pos_b0_ = 0;
-    float pos_b1_ = 0;
-    float traj_pos_error_ = 0.05;
+    float pos_a0_ = 0.0f;
+    float pos_a1_ = 0.0f;
+    float pos_b0_ = 0.0f;
+    float pos_b1_ = 0.0f;
+    float traj_pos_error_ = 0.05f;
 };
 
 extern ODrive odrv;  // defined in main.cpp
