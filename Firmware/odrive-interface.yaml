@@ -170,6 +170,12 @@ interfaces:
               rx_cnt: readonly uint32
               error_cnt: readonly uint32
       user_config_loaded: readonly uint32
+      enable_traj_ctrl: bool
+      pos_a0: float32
+      pos_a1: float32
+      pos_b0: float32
+      pos_b1: float32
+      traj_pos_error: float32
       misconfigured:
         # TODO: make this a system error
         type: readonly bool
