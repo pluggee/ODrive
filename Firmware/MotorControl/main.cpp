@@ -454,9 +454,19 @@ void ODrive::control_loop_cb(uint32_t timestamp) {
         // trajectory control is enabled, execute algorithm here
         if (traj_ab) {
             // motors are moving from A -> B
-
+            pos_error0 = abs(axes[0].encoder_.shadow_count_ - pos_b0_);
+            pos_error1 = abs(axes[1].encoder_.shadow_count_ - pos_b1_);
+            if ((pos_error0 < traj_pos_error_) && (pos_error1 < traj_pos_error_)) {
+                traj_ab = false;
+            }
+            // axes[0].controller_.input_pos_ =
         } else {
             // motors are moving from B -> A
+            pos_error0 = abs(axes[0].encoder_.shadow_count_ - pos_a0_);
+            pos_error1 = abs(axes[1].encoder_.shadow_count_ - pos_a1_);
+            if ((pos_error0 < traj_pos_error_) && (pos_error1 < traj_pos_error_)) {
+                traj_ab = true;
+            }
         }
     }
 

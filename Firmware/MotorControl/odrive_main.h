@@ -248,12 +248,12 @@ class ODrive : public ODriveIntf {
 
     // trajectory control variables here
     bool enable_traj_ctrl_ = false;
-    float pos_a0_ = 0.0f;
-    float pos_a1_ = 0.0f;
-    float pos_b0_ = 0.0f;
-    float pos_b1_ = 0.0f;
-    float pos_error0, pos_error1;
-    float traj_pos_error_ = 0.05f;
+    int32_t pos_a0_ = 0;
+    int32_t pos_a1_ = 0;
+    int32_t pos_b0_ = 0;
+    int32_t pos_b1_ = 0;
+    int32_t pos_error0, pos_error1;
+    float traj_pos_error_ = 10;
     bool traj_ab = false;
 };
 
