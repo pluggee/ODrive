@@ -450,6 +450,16 @@ void ODrive::control_loop_cb(uint32_t timestamp) {
     // else (AB == false)
     //    if both motors positions are within posistion error of a[0/1], the AB = true, that sets target position to Bs
 
+    if (enable_traj_ctrl_) {
+        // trajectory control is enabled, execute algorithm here
+        if (traj_ab) {
+            // motors are moving from A -> B
+
+        } else {
+            // motors are moving from B -> A
+        }
+    }
+
     // Tell the axis threads that the control loop has finished
     for (auto& axis : axes) {
         if (axis.thread_id_) {
