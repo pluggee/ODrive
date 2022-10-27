@@ -459,8 +459,10 @@ void ODrive::control_loop_cb(uint32_t timestamp) {
             // if (axes[0].controller_.trajectory_done_ && axes[1].controller_.trajectory_done_) {
             if ((count_error0_ < traj_count_error_) && (count_error1_ < traj_count_error_)) {
                 traj_ab_ = false;
-                axes[0].controller_.input_pos_ = float(count_a0_) / float(axes[0].encoder_.config_.cpr);
-                axes[1].controller_.input_pos_ = float(count_a1_) / float(axes[1].encoder_.config_.cpr);
+                // axes[0].controller_.input_pos_ = float(count_a0_) / float(axes[0].encoder_.config_.cpr);
+                // axes[1].controller_.input_pos_ = float(count_a1_) / float(axes[1].encoder_.config_.cpr);
+                axes[0].controller_.set_input_pos(float(count_a0_) / float(axes[0].encoder_.config_.cpr));
+                axes[1].controller_.set_input_pos(float(count_a1_) / float(axes[1].encoder_.config_.cpr));
             }
 
         } else {
@@ -470,8 +472,10 @@ void ODrive::control_loop_cb(uint32_t timestamp) {
             // if (axes[0].controller_.trajectory_done_ && axes[1].controller_.trajectory_done_) {
             if ((count_error0_ < traj_count_error_) && (count_error1_ < traj_count_error_)) {
                 traj_ab_ = true;
-                axes[0].controller_.input_pos_ = float(count_b0_) / float(axes[0].encoder_.config_.cpr);
-                axes[1].controller_.input_pos_ = float(count_b1_) / float(axes[1].encoder_.config_.cpr);
+                // axes[0].controller_.input_pos_ = float(count_b0_) / float(axes[0].encoder_.config_.cpr);
+                // axes[1].controller_.input_pos_ = float(count_b1_) / float(axes[1].encoder_.config_.cpr);
+                axes[0].controller_.set_input_pos(float(count_b0_) / float(axes[0].encoder_.config_.cpr));
+                axes[1].controller_.set_input_pos(float(count_b1_) / float(axes[1].encoder_.config_.cpr));
             }
         }
     }

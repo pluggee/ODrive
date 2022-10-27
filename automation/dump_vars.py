@@ -49,6 +49,6 @@ print('axis0.controller.input_pos : ' + str(ip0))
 ip1 = odrv0.axis1.controller.input_pos
 print('axis1.controller.input_pos : ' + str(ip1))
 
-print(' --- writing the same input_position data')
-odrv0.axis0.controller.input_pos = ip0
-odrv0.axis1.controller.input_pos = ip1
+# print(' --- writing the same input_position data')
+# odrv0.axis0.controller.input_pos = ip0
+# odrv0.axis1.controller.input_pos = ip1

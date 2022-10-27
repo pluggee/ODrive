@@ -26,8 +26,6 @@ odrv0.axis0.motor.config.current_lim = 100
 odrv0.axis1.motor.config.current_lim = 100
 odrv0.axis0.controller.config.vel_limit = 10
 odrv0.axis1.controller.config.vel_limit = 10
-# odrv0.axis0.config.motor.current_soft_max = 100
-# odrv0.axis1.config.motor.current_soft_max = 100
 odrv0.axis0.controller.config.input_mode = INPUT_MODE_TRAP_TRAJ
 odrv0.axis1.controller.config.input_mode = INPUT_MODE_TRAP_TRAJ
 
