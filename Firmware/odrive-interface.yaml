@@ -171,14 +171,14 @@ interfaces:
               error_cnt: readonly uint32
       user_config_loaded: readonly uint32
       enable_traj_ctrl: bool
-      pos_a0: int32
-      pos_a1: int32
-      pos_b0: int32
-      pos_b1: int32
-      traj_pos_error: int32
+      count_a0: int32
+      count_a1: int32
+      count_b0: int32
+      count_b1: int32
+      traj_count_error: int32
       traj_ab: bool
-      pos_error0: int32
-      pos_error1: int32
+      count_error0: int32
+      count_error1: int32
       misconfigured:
         # TODO: make this a system error
         type: readonly bool

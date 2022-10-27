@@ -31,7 +31,7 @@ odrv0.axis1.controller.config.vel_limit = 10
 odrv0.axis0.controller.config.input_mode = INPUT_MODE_TRAP_TRAJ
 odrv0.axis1.controller.config.input_mode = INPUT_MODE_TRAP_TRAJ
 
-odrv0.traj_pos_error = 60
+odrv0.traj_count_error = 10
 
 # reposition each motor at flipping threshold
 print('Moving motors to threshold positions')
@@ -43,42 +43,78 @@ odrv0.axis1.controller.config.control_mode = CONTROL_MODE_POSITION_CONTROL
 print('Sleeping until motors settle ...')
 time.sleep(3)
 
-ax0_zero = odrv0.axis0.encoder.shadow_count
-ax1_zero = odrv0.axis1.encoder.shadow_count
-
 turn_angle = 0.2
 cpr0 = odrv0.axis0.encoder.config.cpr
 cpr1 = odrv0.axis1.encoder.config.cpr
 
-ax0_a = ax0_zero + turn_angle * cpr0
-ax1_a = ax1_zero + turn_angle * cpr1
-ax0_b = ax0_zero - turn_angle * cpr0
-ax1_b = ax1_zero - turn_angle * cpr1
 
-input_pos_0 = ax0_a / cpr0
-input_pos_1 = ax1_a / cpr1
+z0_count = odrv0.axis0.encoder.shadow_count
+z1_count = odrv0.axis1.encoder.shadow_count
+z0_pos = z0_count/cpr0
+z1_pos = z1_count/cpr1
+
+a0_count = z0_count + turn_angle * cpr0
+a1_count = z1_count + turn_angle * cpr1
+a0_pos = a0_count / cpr0
+a1_pos = a1_count / cpr1
+
+b0_count = z0_count - turn_angle * cpr0
+b1_count = z1_count - turn_angle * cpr1
+b0_pos = b0_count / cpr0
+b1_pos = b1_count / cpr1
+
+# load a/b count positions
+odrv0.count_a0 = a0_count
+odrv0.count_a1 = a1_count
+odrv0.count_b0 = b0_count
+odrv0.count_b1 = b1_count
 
 print('---------------------------------------------')
-print('AXIS 0 zero  position   = ' + str(ax0_zero))
-print('AXIS 0 A position       = ' + str(ax0_a))
-print('AXIS 0 B position       = ' + str(ax0_b))
-print('AXIS 0 input_pos        = ' + str(input_pos_0))
+print('z0_count    = ' + str(z0_count))
+print('a0_count    = ' + str(a0_count))
+print('b0_count    = ' + str(b0_count))
+print('a0_pos      = ' + str(a0_pos))
+print('b0_pos      = ' + str(b0_pos))
 print('---------------------------------------------')
-print('AXIS 1 zero  position   = ' + str(ax1_zero))
-print('AXIS 1 A position       = ' + str(ax1_a))
-print('AXIS 1 B position       = ' + str(ax1_b))
-print('AXIS 1 input_pos        = ' + str(input_pos_1))
+print('z1_count    = ' + str(z0_count))
+print('a1_count    = ' + str(a0_count))
+print('b1_count    = ' + str(b0_count))
+print('a1_pos      = ' + str(a0_pos))
+print('b1_pos      = ' + str(b0_pos))
 print('---------------------------------------------')
 print('Positioning to start points')
-time.sleep(2)
 
-odrv0.axis0.controller.input_pos = input_pos_0
-odrv0.axis1.controller.input_pos = input_pos_1
+odrv0.axis0.controller.input_pos = a0_pos
+odrv0.axis1.controller.input_pos = a1_pos
+print('Sleeping before beginning motion')
+time.sleep(3)
+a0_count_meas = odrv0.axis0.encoder.shadow_count
+a1_count_meas = odrv0.axis1.encoder.shadow_count
 
-print('Sleeping 5 sec before beginning motion')
-time.sleep(5)
+odrv0.axis0.controller.input_pos = b0_pos
+odrv0.axis1.controller.input_pos = b1_pos
+print('Sleeping before beginning motion')
+time.sleep(3)
+b0_count_meas = odrv0.axis0.encoder.shadow_count
+b1_count_meas = odrv0.axis1.encoder.shadow_count
+
+print()
+print(' -- Measurement report')
+print('a0 count delta = ' + str(a0_count - a0_count_meas))
+print('a1 count delta = ' + str(a1_count - a1_count_meas))
+print('b0 count delta = ' + str(b0_count - b0_count_meas))
+print('b1 count delta = ' + str(b1_count - b1_count_meas))
+
+odrv0.axis0.controller.input_pos = a0_pos
+odrv0.axis1.controller.input_pos = a1_pos
+print('Sleeping before starting automatic motion')
+time.sleep(3)
 
 odrv0.enable_traj_ctrl = True
+
+odrv0.axis0.controller.input_pos = b0_pos
+odrv0.axis1.controller.input_pos = b1_pos
+
 
 # wait until position settles
 

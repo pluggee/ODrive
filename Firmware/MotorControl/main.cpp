@@ -454,23 +454,24 @@ void ODrive::control_loop_cb(uint32_t timestamp) {
         // trajectory control is enabled, execute algorithm here
         if (traj_ab_) {
             // motors are moving from A -> B
-            pos_error0_ = abs(axes[0].encoder_.shadow_count_ - pos_b0_);
-            pos_error1_ = abs(axes[1].encoder_.shadow_count_ - pos_b1_);
+            count_error0_ = abs(axes[0].encoder_.shadow_count_ - count_b0_);
+            count_error1_ = abs(axes[1].encoder_.shadow_count_ - count_b1_);
             // if (axes[0].controller_.trajectory_done_ && axes[1].controller_.trajectory_done_) {
-            if ((pos_error0_ < traj_pos_error_) && (pos_error1_ < traj_pos_error_)) {
+            if ((count_error0_ < traj_count_error_) && (count_error1_ < traj_count_error_)) {
                 traj_ab_ = false;
-                axes[0].controller_.input_pos_ = float(pos_a0_) / float(axes[0].encoder_.config_.cpr);
-                axes[1].controller_.input_pos_ = float(pos_a1_) / float(axes[1].encoder_.config_.cpr);
+                axes[0].controller_.input_pos_ = float(count_a0_) / float(axes[0].encoder_.config_.cpr);
+                axes[1].controller_.input_pos_ = float(count_a1_) / float(axes[1].encoder_.config_.cpr);
             }
+
         } else {
             // motors are moving from B -> A
-            pos_error0_ = abs(axes[0].encoder_.shadow_count_ - pos_a0_);
-            pos_error1_ = abs(axes[1].encoder_.shadow_count_ - pos_a1_);
+            count_error0_ = abs(axes[0].encoder_.shadow_count_ - count_a0_);
+            count_error1_ = abs(axes[1].encoder_.shadow_count_ - count_a1_);
             // if (axes[0].controller_.trajectory_done_ && axes[1].controller_.trajectory_done_) {
-            if ((pos_error0_ < traj_pos_error_) && (pos_error1_ < traj_pos_error_)) {
+            if ((count_error0_ < traj_count_error_) && (count_error1_ < traj_count_error_)) {
                 traj_ab_ = true;
-                axes[0].controller_.input_pos_ = float(pos_b0_) / float(axes[0].encoder_.config_.cpr);
-                axes[1].controller_.input_pos_ = float(pos_b1_) / float(axes[1].encoder_.config_.cpr);
+                axes[0].controller_.input_pos_ = float(count_b0_) / float(axes[0].encoder_.config_.cpr);
+                axes[1].controller_.input_pos_ = float(count_b1_) / float(axes[1].encoder_.config_.cpr);
             }
         }
     }
