@@ -41,7 +41,7 @@ odrv0.axis1.controller.config.control_mode = CONTROL_MODE_POSITION_CONTROL
 print('Sleeping until motors settle ...')
 time.sleep(3)
 
-turn_angle = 0.2
+turn_angle = 0.15
 cpr0 = odrv0.axis0.encoder.config.cpr
 cpr1 = odrv0.axis1.encoder.config.cpr
 
@@ -108,6 +108,7 @@ odrv0.axis1.controller.input_pos = a1_pos
 print('Sleeping before starting automatic motion')
 time.sleep(3)
 
+odrv0.traj_ab = True
 odrv0.enable_traj_ctrl = True
 
 odrv0.axis0.controller.input_pos = b0_pos

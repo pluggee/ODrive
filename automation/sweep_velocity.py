@@ -19,9 +19,9 @@ def set_velocity(vset):
     odrv0.axis1.controller.config.vel_limit = 5*vset
 
 
-vstart = 4
-vstop = 40
-vstep = 4
+vstart = 10
+vstop = 80
+vstep = 10
 sleep_duration = 5
 
 for v in range(vstart, vstop, vstep):
