@@ -41,7 +41,7 @@ odrv0.axis1.controller.config.control_mode = CONTROL_MODE_POSITION_CONTROL
 print('Sleeping until motors settle ...')
 time.sleep(3)
 
-turn_angle = 0.15
+turn_angle = 0.1
 cpr0 = odrv0.axis0.encoder.config.cpr
 cpr1 = odrv0.axis1.encoder.config.cpr
 

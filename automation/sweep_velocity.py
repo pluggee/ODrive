@@ -20,7 +20,7 @@ def set_velocity(vset):
 
 
 vstart = 10
-vstop = 80
+vstop = 120
 vstep = 10
 sleep_duration = 5
 
